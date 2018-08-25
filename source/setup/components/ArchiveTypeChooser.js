@@ -4,6 +4,11 @@ import styled from "styled-components";
 
 const ARCHIVE_TYPES = [
     {
+        type: "mybuttercup",
+        title: "My Buttercup",
+        image: require("../../../resources/providers/mybuttercup-256.png")
+    },
+    {
         type: "dropbox",
         title: "Dropbox",
         image: require("../../../resources/providers/dropbox-256.png")
@@ -35,11 +40,11 @@ const Container = styled.div`
     justify-content: flex-start;
 `;
 const ArchiveItemContainer = styled.div`
-    width: 80px;
-    height: 80px;
+    width: 96px;
+    height: 96px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     cursor: pointer;
     background-color: ${props =>
@@ -50,12 +55,12 @@ const ArchiveItemContainer = styled.div`
     }
 `;
 const ArchiveTypeImage = styled.img`
-    margin-top: 16px;
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
 `;
 const ArchiveTypeTitle = styled.div`
     margin-top: 4px;
+    text-align: center;
 `;
 
 class ArchiveTypeChooser extends Component {
