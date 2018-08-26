@@ -7,6 +7,7 @@ import Spinner from "react-spinkit";
 import LayoutMain from "./LayoutMain.js";
 import ArchiveTypeChooser from "../containers/ArchiveTypeChooser.js";
 import RemoteExplorer from "../containers/RemoteExplorer.js";
+import MyButtercupArchiveChooser from "../containers/MyButtercupArchiveChooser.js";
 import { FormButtonContainer, FormContainer, FormLegendItem, FormRow, FormInputItem } from "./forms.js";
 
 const SubSection = styled.div`
@@ -168,7 +169,7 @@ class AddArchivePage extends Component {
                 </If>
                 <If condition={isTargetingMyButtercup && hasAuthenticatedMyButtercup}>
                     <h3>Choose Archive(s)</h3>
-                    <span>This is where organisation / archive choosing will be...</span>
+                    <MyButtercupArchiveChooser />
                     <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
                 </If>
             </LayoutMain>
