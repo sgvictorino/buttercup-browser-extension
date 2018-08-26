@@ -32,6 +32,7 @@ class AddArchivePage extends Component {
         isConnected: PropTypes.bool.isRequired,
         isConnecting: PropTypes.bool.isRequired,
         onAuthenticateDropbox: PropTypes.func.isRequired,
+        onAuthenticateMyButtercup: PropTypes.func.isRequired,
         onChooseDropboxBasedArchive: PropTypes.func.isRequired,
         onChooseWebDAVBasedArchive: PropTypes.func.isRequired,
         onConnectWebDAVBasedSource: PropTypes.func.isRequired,
@@ -55,7 +56,8 @@ class AddArchivePage extends Component {
 
     componentDidMount() {
         this.setState({
-            dropboxAuthenticationID: uuid()
+            dropboxAuthenticationID: uuid(),
+            myButtercupAuthenticationID: uuid()
         });
     }
 
@@ -113,6 +115,11 @@ class AddArchivePage extends Component {
         );
     }
 
+    handleMyButtercupAuth(event) {
+        event.preventDefault();
+        this.props.onAuthenticateMyButtercup(this.state.myButtercupAuthenticationID);
+    }
+
     handleUpdateForm(property, event) {
         this.setState({
             [property]: event.target.value
@@ -122,8 +129,11 @@ class AddArchivePage extends Component {
     render() {
         const canShowWebDAVExplorer = ["webdav", "owncloud", "nextcloud"].includes(this.props.selectedArchiveType);
         const isTargetingDropbox = this.props.selectedArchiveType === "dropbox";
+        const isTargetingMyButtercup = this.props.selectedArchiveType === "mybuttercup";
         const hasAuthenticatedDropbox =
             this.props.dropboxAuthID === this.state.dropboxAuthenticationID && this.props.dropboxAuthToken;
+        const hasAuthenticatedMyButtercup =
+            this.props.myButtercupAuthID === this.state.myButtercupAuthenticationID && this.props.myButtercupAuthToken;
         return (
             <LayoutMain title="Add Archive">
                 <h3>Choose Archive Type</h3>
@@ -154,6 +164,11 @@ class AddArchivePage extends Component {
                         selectedFilenameNeedsCreation={this.props.selectedFilenameNeedsCreation}
                         fetchType="dropbox"
                     />
+                    <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
+                </If>
+                <If condition={isTargetingMyButtercup && hasAuthenticatedMyButtercup}>
+                    <h3>Choose Archive(s)</h3>
+                    <span>This is where organisation / archive choosing will be...</span>
                     <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
                 </If>
             </LayoutMain>
@@ -194,6 +209,11 @@ class AddArchivePage extends Component {
                                 Save Archive
                             </ButtercupButton>
                         </When>
+                        <When condition={this.props.selectedArchiveType === "mybuttercup"}>
+                            <ButtercupButton onClick={event => this.handleChooseDropboxBasedFile(event)}>
+                                Save Archive
+                            </ButtercupButton>
+                        </When>
                         <Otherwise>
                             <ButtercupButton onClick={event => this.handleChooseWebDAVBasedFile(event)}>
                                 Save Archive
@@ -208,9 +228,11 @@ class AddArchivePage extends Component {
 
     renderConnectionInfo() {
         const connectionOptionsDisabled = this.props.isConnecting || this.props.isConnected;
-        const title =
-            this.props.selectedArchiveType === "dropbox" ? "Authenticate Cloud Source" : "Enter Connection Details";
+        const title = ["dropbox", "mybuttercup"].includes(this.props.selectedArchiveType)
+            ? "Authenticate Cloud Source"
+            : "Enter Connection Details";
         const isAuthenticatingDropbox = this.props.dropboxAuthID === this.state.dropboxAuthenticationID;
+        const isAuthenticatingMyButtercup = this.props.myButtercupAuthID === this.state.myButtercupAuthenticationID;
         return (
             <SubSection>
                 <h3>{title}</h3>
@@ -353,7 +375,17 @@ class AddArchivePage extends Component {
                     <When condition={this.props.selectedArchiveType === "dropbox"}>
                         <FormButtonContainer>
                             <ButtercupButton onClick={::this.handleDropboxAuth} disabled={isAuthenticatingDropbox}>
-                                Grant Dropbox Access
+                                Authenticate with Dropbox
+                            </ButtercupButton>
+                        </FormButtonContainer>
+                    </When>
+                    <When condition={this.props.selectedArchiveType === "mybuttercup"}>
+                        <FormButtonContainer>
+                            <ButtercupButton
+                                onClick={::this.handleMyButtercupAuth}
+                                disabled={isAuthenticatingMyButtercup}
+                            >
+                                Authenticate with My Buttercup
                             </ButtercupButton>
                         </FormButtonContainer>
                     </When>
