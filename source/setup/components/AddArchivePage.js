@@ -41,7 +41,8 @@ class AddArchivePage extends Component {
         onSelectRemotePath: PropTypes.func.isRequired,
         selectedArchiveType: PropTypes.string,
         selectedFilename: PropTypes.string,
-        selectedFilenameNeedsCreation: PropTypes.bool.isRequired
+        selectedFilenameNeedsCreation: PropTypes.bool.isRequired,
+        selectedMyButtercupArchives: PropTypes.arrayOf(PropTypes.number).isRequired
     };
 
     // We store some details in the state, because they're sensitive. No point
@@ -71,6 +72,10 @@ class AddArchivePage extends Component {
         event.preventDefault();
         // We send the remote credentials as these should never touch Redux
         this.props.onChooseDropboxBasedArchive(this.state.archiveName, this.state.masterPassword);
+    }
+
+    handleChooseMyButtercupBasedArchives(event) {
+        event.preventDefault();
     }
 
     handleChooseWebDAVBasedFile(event) {
@@ -170,7 +175,9 @@ class AddArchivePage extends Component {
                 <If condition={isTargetingMyButtercup && hasAuthenticatedMyButtercup}>
                     <h3>Choose Archive(s)</h3>
                     <MyButtercupArchiveChooser />
-                    <If condition={this.props.selectedFilename}>{this.renderArchiveNameInput()}</If>
+                    <If condition={this.props.selectedMyButtercupArchives.length > 0}>
+                        {this.renderArchiveNameInput()}
+                    </If>
                 </If>
             </LayoutMain>
         );
@@ -179,29 +186,53 @@ class AddArchivePage extends Component {
     renderArchiveNameInput() {
         return (
             <SubSection key="archiveNameInput">
-                <h3>Enter Archive Name</h3>
+                <Choose>
+                    <When condition={this.props.selectedArchiveType === "mybuttercup"}>
+                        <h3>Enter Account Details</h3>
+                    </When>
+                    <Otherwise>
+                        <h3>Enter Archive Details</h3>
+                    </Otherwise>
+                </Choose>
                 <FormContainer>
-                    <FormRow>
-                        <FormLegendItem>Name</FormLegendItem>
-                        <FormInputItem>
-                            <ButtercupInput
-                                placeholder="Enter archive name..."
-                                onChange={event => this.handleUpdateForm("archiveName", event)}
-                                value={this.state.archiveName}
-                            />
-                        </FormInputItem>
-                    </FormRow>
-                    <FormRow>
-                        <FormLegendItem>Master Password</FormLegendItem>
-                        <FormInputItem>
-                            <ButtercupInput
-                                placeholder="Enter archive password..."
-                                onChange={event => this.handleUpdateForm("masterPassword", event)}
-                                type="password"
-                                value={this.state.masterPassword}
-                            />
-                        </FormInputItem>
-                    </FormRow>
+                    <Choose>
+                        <When condition={this.props.selectedArchiveType === "mybuttercup"}>
+                            <FormRow>
+                                <FormLegendItem>Master Password</FormLegendItem>
+                                <FormInputItem>
+                                    <ButtercupInput
+                                        placeholder="Enter account password..."
+                                        onChange={event => this.handleUpdateForm("masterPassword", event)}
+                                        type="password"
+                                        value={this.state.masterPassword}
+                                    />
+                                </FormInputItem>
+                            </FormRow>
+                        </When>
+                        <Otherwise>
+                            <FormRow>
+                                <FormLegendItem>Name</FormLegendItem>
+                                <FormInputItem>
+                                    <ButtercupInput
+                                        placeholder="Enter archive name..."
+                                        onChange={event => this.handleUpdateForm("archiveName", event)}
+                                        value={this.state.archiveName}
+                                    />
+                                </FormInputItem>
+                            </FormRow>
+                            <FormRow>
+                                <FormLegendItem>Master Password</FormLegendItem>
+                                <FormInputItem>
+                                    <ButtercupInput
+                                        placeholder="Enter archive password..."
+                                        onChange={event => this.handleUpdateForm("masterPassword", event)}
+                                        type="password"
+                                        value={this.state.masterPassword}
+                                    />
+                                </FormInputItem>
+                            </FormRow>
+                        </Otherwise>
+                    </Choose>
                 </FormContainer>
                 <FormButtonContainer>
                     <Choose>
@@ -211,8 +242,8 @@ class AddArchivePage extends Component {
                             </ButtercupButton>
                         </When>
                         <When condition={this.props.selectedArchiveType === "mybuttercup"}>
-                            <ButtercupButton onClick={event => this.handleChooseDropboxBasedFile(event)}>
-                                Save Archive
+                            <ButtercupButton onClick={event => this.handleChooseMyButtercupBasedArchives(event)}>
+                                Save Archive(s)
                             </ButtercupButton>
                         </When>
                         <Otherwise>

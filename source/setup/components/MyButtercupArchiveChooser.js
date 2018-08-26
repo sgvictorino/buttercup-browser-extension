@@ -93,11 +93,8 @@ class MyButtercupArchiveChooser extends Component {
     static propTypes = {
         onReady: PropTypes.func.isRequired,
         organisationArchives: PropTypes.objectOf(PropTypes.arrayOf(ArchiveShape)).isRequired,
-        organisations: PropTypes.arrayOf(OrgnanisationShape).isRequired
-    };
-
-    state = {
-        selectedArchives: []
+        organisations: PropTypes.arrayOf(OrgnanisationShape).isRequired,
+        selectedArchives: PropTypes.arrayOf(PropTypes.number).isRequired
     };
 
     componentWillMount() {
@@ -106,15 +103,7 @@ class MyButtercupArchiveChooser extends Component {
 
     handleArchiveRowClick(event, archiveID) {
         event.preventDefault();
-        if (this.state.selectedArchives.includes(archiveID)) {
-            this.setState({
-                selectedArchives: this.state.selectedArchives.filter(id => id !== archiveID)
-            });
-        } else {
-            this.setState({
-                selectedArchives: [...this.state.selectedArchives, archiveID]
-            });
-        }
+        this.props.toggleSelectedArchive(archiveID);
     }
 
     render() {
@@ -141,7 +130,7 @@ class MyButtercupArchiveChooser extends Component {
                                 onClick={event => this.handleArchiveRowClick(event, archive.id)}
                             >
                                 <ArchiveRowCheckbox>
-                                    <If condition={this.state.selectedArchives.includes(archive.id)}>
+                                    <If condition={this.props.selectedArchives.includes(archive.id)}>
                                         <FontAwesome name="check" />
                                     </If>
                                 </ArchiveRowCheckbox>
