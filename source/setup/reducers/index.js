@@ -6,7 +6,7 @@ import app from "../../shared/reducers/app.js";
 import addArchive from "./addArchive.js";
 import dropbox from "../../shared/reducers/dropbox.js";
 import manageArchive from "./manageArchive.js";
-import myButtercup from "../../shared/reducers/mybuttercup";
+import myButtercup from "../../shared/reducers/myButtercup.js";
 import remoteFiles from "./remoteFiles.js";
 import searching from "../../shared/reducers/searching.js";
 
