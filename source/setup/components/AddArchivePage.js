@@ -35,6 +35,7 @@ class AddArchivePage extends Component {
         onAuthenticateDropbox: PropTypes.func.isRequired,
         onAuthenticateMyButtercup: PropTypes.func.isRequired,
         onChooseDropboxBasedArchive: PropTypes.func.isRequired,
+        onChooseMyButtercupArchives: PropTypes.func.isRequired,
         onChooseWebDAVBasedArchive: PropTypes.func.isRequired,
         onConnectWebDAVBasedSource: PropTypes.func.isRequired,
         onCreateRemotePath: PropTypes.func.isRequired,
@@ -76,6 +77,7 @@ class AddArchivePage extends Component {
 
     handleChooseMyButtercupBasedArchives(event) {
         event.preventDefault();
+        this.props.onChooseMyButtercupArchives(this.state.masterPassword);
     }
 
     handleChooseWebDAVBasedFile(event) {

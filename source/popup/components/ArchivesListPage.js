@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 const ARCHIVE_IMAGES = {
     dropbox: require("../../../resources/providers/dropbox-256.png"),
+    mybuttercup: require("../../../resources/providers/mybuttercup-256.png"),
     owncloud: require("../../../resources/providers/owncloud-256.png"),
     nextcloud: require("../../../resources/providers/nextcloud-256.png"),
     webdav: require("../../../resources/providers/webdav-white-256.png")
@@ -188,7 +189,7 @@ const Message = styled.div`
 function getProviderImage(archiveSourceType) {
     const imageSrc = ARCHIVE_IMAGES[archiveSourceType];
     if (!imageSrc) {
-        throw new Error(`No image asset for archive type: ${archiveSourceType}`);
+        return null;
     }
     return <ArchiveTypeImage src={imageSrc} />;
 }
