@@ -16,6 +16,5 @@ watchStorageForConfig(store);
 startMessageListener();
 attachBrowserStateListeners();
 updateContextMenu();
-setTimeout(checkUnlockPossibility, 2500);
 
 log.info("Started successfully");
